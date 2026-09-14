@@ -1,64 +1,61 @@
+// ============================================================
+// FILTRO DE PROJETOS
+// ============================================================
 
-// Espera a página carregar completamente antes de executar
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // Pega todos os links de navegação
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    // Para cada link de navegação
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            navLinks.forEach(l => l.classList.remove('active'));
-            
-            this.classList.add('active');
+const projectCards =
+    document.querySelectorAll(".project-card");
+
+const filterButtons =
+    document.querySelectorAll(".filter-button");
+
+
+filterButtons.forEach((button) => {
+
+    button.addEventListener("click", () => {
+
+        // Remove o estado ativo dos outros botões
+
+        filterButtons.forEach((item) => {
+
+            item.classList.remove("active");
+
         });
-    });
-    
-    const sections = document.querySelectorAll('.section');
-    
-    function highlightNavOnScroll() {
-        let currentSection = '';
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            
-            if (window.scrollY >= (sectionTop - 150)) {
-                currentSection = section.getAttribute('id');
+
+
+        // Ativa o botão selecionado
+
+        button.classList.add("active");
+
+
+        // Descobre o filtro escolhido
+
+        const selectedFilter =
+            button.getAttribute("data-filter");
+
+
+        // Filtra os projetos
+
+        projectCards.forEach((card) => {
+
+            const category =
+                card.getAttribute("data-category");
+
+
+            if (
+                selectedFilter === "all" ||
+                category === selectedFilter
+            ) {
+
+                card.hidden = false;
+
+            } else {
+
+                card.hidden = true;
+
             }
+
         });
-        
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            
-            if (link.getAttribute('href') === `#${currentSection}`) {
-                link.classList.add('active');
-            }
-        });
-    }
-    
-    window.addEventListener('scroll', highlightNavOnScroll);
-    
-    const backToTopButton = document.getElementById('backToTop');
-    
-    // Mostra/esconde o botão baseado na posição da página
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > 300) {
-            backToTopButton.classList.add('visible');
-        } else {
-            backToTopButton.classList.remove('visible');
-        }
+
     });
-    
-    // Quando clicar no botão, volta ao topo
-    backToTopButton.addEventListener('click', function() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth' // Rola suavemente
-        });
-    });
-    
-    
+
 });
-
-

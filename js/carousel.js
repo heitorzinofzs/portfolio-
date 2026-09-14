@@ -1,187 +1,446 @@
-// ========================================
-// CARROSSEL DE IMAGENS DOS PROJETOS
-// Arquivo separado para melhor organização
-// ========================================
+// ============================================================
+// CARROSSEL DE IMAGENS
+// ============================================================
 
-// Variáveis globais do carrossel
-let indiceAtual = 0;
-let imagensAtuais = [];
-let projetoAtual = '';
 
-// Objeto com os caminhos das imagens de cada projeto
-// ADICIONE AQUI os caminhos das suas imagens
-const imagensProjetos = {
-    // SmarTech - 7 imagens
+// ------------------------------------------------------------
+// ELEMENTOS DO MODAL
+// ------------------------------------------------------------
+
+const modal =
+    document.getElementById("project-modal");
+
+
+const modalImage =
+    document.getElementById("modal-img");
+
+
+const modalClose =
+    document.getElementById("modal-close");
+
+
+const previousButton =
+    document.getElementById("carousel-prev");
+
+
+const nextButton =
+    document.getElementById("carousel-next");
+
+
+const currentImage =
+    document.getElementById("img-atual");
+
+
+const totalImages =
+    document.getElementById("img-total");
+
+
+const thumbnailsContainer =
+    document.getElementById("thumbnails-container");
+
+
+
+// ------------------------------------------------------------
+// PROJETOS
+// ------------------------------------------------------------
+
+const projectImages = {
+
     smartech: [
-        'assets/projects/smartech1.png',
-        'assets/projects/smartech2.png',
-        'assets/projects/smartech3.png',
-        'assets/projects/smartech4.png',
-        'assets/projects/smartech5.png',
-        'assets/projects/smartech6.png',
-        'assets/projects/smartech7.png'
+        "assets/projects/smartech1.png",
+        "assets/projects/smartech2.png",
+        "assets/projects/smartech3.png",
+        "assets/projects/smartech4.png",
+        "assets/projects/smartech5.png",
+        "assets/projects/smartech6.png",
+        "assets/projects/smartech7.png"  
     ],
-    
-    // Duat Cassinos - 6 imagens
+
+
     duat: [
-        'assets/projects/duatcassinos1.png',
-        'assets/projects/duatcassinos2.png',
-        'assets/projects/duatcassinos3.png',
-        'assets/projects/duatcassinos4.png',
-        'assets/projects/duatcassinos5.png',
-        'assets/projects/duatcassinos6.png'
+        "assets/projects/duatcassinos1.png",
+        "assets/projects/duatcassinos2.png",
+        "assets/projects/duatcassinos3.png",
+        "assets/projects/duatcassinos4.png",
+        "assets/projects/duatcassinos5.png",
+        "assets/projects/duatcassinos6.png"
     ]
-    
-    // ADICIONE MAIS PROJETOS AQUI:
-    // nomedobutao: [
-    //     'assets/projects/imagem1.png',
-    //     'assets/projects/imagem2.png'
-    // ]
+
 };
 
-// Função para abrir o modal
-// Chamada do HTML via: onclick="abrirModal('smartech')"
-function abrirModal(projeto) {
-    projetoAtual = projeto;
-    imagensAtuais = imagensProjetos[projeto];
-    
-    // Valida se o projeto existe
-    if (!imagensAtuais) {
-        console.error(`Projeto "${projeto}" não encontrado!`);
-        return;
-    }
-    
-    indiceAtual = 0;
-    
-    const modal = document.getElementById('modal-imagens');
-    if (!modal) {
-        console.error('Modal não encontrado! Verifique se o HTML tem id="modal-imagens"');
-        return;
-    }
-    
-    modal.classList.add('ativo');
-    document.body.style.overflow = 'hidden';
-    
-    exibirImagem();
-    criarMiniaturas();
-}
 
-// Função para fechar o modal
-// Pode ser chamada clicando fora do modal ou no botão X
-function fecharModal(event) {
-    if (!event || event.target.classList.contains('modal-overlay')) {
-        const modal = document.getElementById('modal-imagens');
-        if (modal) {
-            modal.classList.remove('ativo');
-            document.body.style.overflow = 'auto';
-        }
-    }
-}
 
-// Função para mudar de imagem
-// direcao: -1 (anterior) ou 1 (próxima)
-function mudarImagem(direcao) {
-    indiceAtual += direcao;
-    
-    // Loop circular: volta ao início ou vai pro final
-    if (indiceAtual >= imagensAtuais.length) {
-        indiceAtual = 0;
-    } else if (indiceAtual < 0) {
-        indiceAtual = imagensAtuais.length - 1;
-    }
-    
-    exibirImagem();
-    atualizarMiniaturas();
-}
+// ------------------------------------------------------------
+// ESTADO DO CARROSSEL
+// ------------------------------------------------------------
 
-// Função para ir direto para uma imagem específica
-// Chamada quando clica numa miniatura
-function irParaImagem(indice) {
-    indiceAtual = indice;
-    exibirImagem();
-    atualizarMiniaturas();
-}
+let currentProject = null;
 
-// Função auxiliar para exibir a imagem atual
-function exibirImagem() {
-    const img = document.getElementById('modal-img');
-    const imgAtual = document.getElementById('img-atual');
-    const imgTotal = document.getElementById('img-total');
-    
-    if (!img) {
-        console.error('Elemento modal-img não encontrado!');
-        return;
-    }
-    
-    img.src = imagensAtuais[indiceAtual];
-    
-    if (imgAtual) imgAtual.textContent = indiceAtual + 1;
-    if (imgTotal) imgTotal.textContent = imagensAtuais.length;
-}
+let currentIndex = 0;
 
-// Função para criar as miniaturas (thumbnails)
-function criarMiniaturas() {
-    const container = document.getElementById('thumbnails-container');
-    
-    if (!container) {
-        console.error('Container de thumbnails não encontrado!');
-        return;
-    }
-    
-    container.innerHTML = '';
-    
-    imagensAtuais.forEach((caminho, indice) => {
-        const thumb = document.createElement('img');
-        thumb.src = caminho;
-        thumb.alt = `Miniatura ${indice + 1}`;
-        thumb.onclick = () => irParaImagem(indice);
-        
-        // Marca a primeira como ativa
-        if (indice === 0) {
-            thumb.classList.add('ativa');
-        }
-        
-        container.appendChild(thumb);
+
+
+// ------------------------------------------------------------
+// BOTÕES "VER IMAGENS"
+// ------------------------------------------------------------
+
+const imageButtons =
+    document.querySelectorAll(".btn-images");
+
+
+imageButtons.forEach((button) => {
+
+    button.addEventListener("click", () => {
+
+        const project =
+            button.getAttribute("data-project");
+
+
+        openCarousel(project);
+
     });
-}
 
-// Função para atualizar qual miniatura está ativa
-function atualizarMiniaturas() {
-    const thumbs = document.querySelectorAll('.carousel-thumbnails img');
-    
-    thumbs.forEach((thumb, indice) => {
-        if (indice === indiceAtual) {
-            thumb.classList.add('ativa');
-        } else {
-            thumb.classList.remove('ativa');
-        }
-    });
-}
-
-// ========================================
-// NAVEGAÇÃO POR TECLADO
-// ========================================
-
-document.addEventListener('keydown', (e) => {
-    const modal = document.getElementById('modal-imagens');
-    
-    // Só funciona se o modal estiver aberto
-    if (modal && modal.classList.contains('ativo')) {
-        if (e.key === 'ArrowLeft') {
-            mudarImagem(-1); // Seta esquerda = anterior
-        } else if (e.key === 'ArrowRight') {
-            mudarImagem(1); // Seta direita = próxima
-        } else if (e.key === 'Escape') {
-            fecharModal(); // ESC = fechar
-        }
-    }
 });
 
-// ========================================
-// INICIALIZAÇÃO (quando a página carregar)
-// ========================================
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Carrossel inicializado com sucesso!');
-    console.log('Projetos disponíveis:', Object.keys(imagensProjetos));
-});
+
+// ------------------------------------------------------------
+// ABRIR CARROSSEL
+// ------------------------------------------------------------
+
+function openCarousel(project) {
+
+    const images =
+        projectImages[project];
+
+
+    if (!images || images.length === 0) {
+
+        alert(
+            "As imagens deste projeto ainda serão adicionadas ao portfólio."
+        );
+
+        return;
+    }
+
+
+    currentProject = project;
+
+    currentIndex = 0;
+
+    modal.classList.add("active");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    updateCarousel();
+
+}
+
+
+
+// ------------------------------------------------------------
+// ATUALIZAR CARROSSEL
+// ------------------------------------------------------------
+
+function updateCarousel() {
+
+    const images =
+        projectImages[currentProject];
+
+
+    if (!images || images.length === 0) {
+        return;
+    }
+
+
+    // Atualiza imagem principal
+    modalImage.src =
+        images[currentIndex];
+
+
+    // Atualiza texto alternativo
+    modalImage.alt =
+        `Imagem ${currentIndex + 1} do projeto ${currentProject}`;
+
+
+    // Atualiza contador
+    currentImage.textContent =
+        currentIndex + 1;
+
+
+    totalImages.textContent =
+        images.length;
+
+
+    // Recria as miniaturas
+    createThumbnails(images);
+
+}
+
+
+
+// ------------------------------------------------------------
+// MINIATURAS
+// ------------------------------------------------------------
+
+function createThumbnails(images) {
+
+    thumbnailsContainer.innerHTML = "";
+
+
+    images.forEach((image, index) => {
+
+        const thumbnail =
+            document.createElement("button");
+
+
+        thumbnail.type = "button";
+
+
+        thumbnail.classList.add(
+            "carousel-thumbnail"
+        );
+
+
+        if (index === currentIndex) {
+
+            thumbnail.classList.add("active");
+
+        }
+
+
+        const thumbnailImage =
+            document.createElement("img");
+
+
+        thumbnailImage.src =
+            image;
+
+
+        thumbnailImage.alt =
+            `Miniatura ${index + 1}`;
+
+
+        thumbnail.appendChild(
+            thumbnailImage
+        );
+
+
+        thumbnail.addEventListener(
+            "click",
+            () => {
+
+                currentIndex = index;
+
+                updateCarousel();
+
+            }
+        );
+
+
+        thumbnailsContainer.appendChild(
+            thumbnail
+        );
+
+    });
+
+}
+
+
+
+// ------------------------------------------------------------
+// IMAGEM ANTERIOR
+// ------------------------------------------------------------
+
+if (previousButton) {
+
+    previousButton.addEventListener(
+        "click",
+        () => {
+
+            const images =
+                projectImages[currentProject];
+
+
+            if (!images || images.length === 0) {
+                return;
+            }
+
+
+            currentIndex--;
+
+
+            if (currentIndex < 0) {
+
+                currentIndex =
+                    images.length - 1;
+
+            }
+
+
+            updateCarousel();
+
+        }
+    );
+
+}
+
+
+
+// ------------------------------------------------------------
+// PRÓXIMA IMAGEM
+// ------------------------------------------------------------
+
+if (nextButton) {
+
+    nextButton.addEventListener(
+        "click",
+        () => {
+
+            const images =
+                projectImages[currentProject];
+
+
+            if (!images || images.length === 0) {
+                return;
+            }
+
+
+            currentIndex++;
+
+
+            if (
+                currentIndex >=
+                images.length
+            ) {
+
+                currentIndex = 0;
+
+            }
+
+
+            updateCarousel();
+
+        }
+    );
+
+}
+
+
+
+// ------------------------------------------------------------
+// FECHAR MODAL
+// ------------------------------------------------------------
+
+function closeCarousel() {
+
+    modal.classList.remove("active");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    modalImage.src = "";
+
+    currentProject = null;
+
+}
+
+
+
+// Botão X
+if (modalClose) {
+
+    modalClose.addEventListener(
+        "click",
+        closeCarousel
+    );
+
+}
+
+
+
+// Clique fora da janela
+if (modal) {
+
+    modal.addEventListener(
+        "click",
+        (event) => {
+
+            if (
+                event.target === modal
+            ) {
+
+                closeCarousel();
+
+            }
+
+        }
+    );
+
+}
+
+
+
+// ------------------------------------------------------------
+// TECLA ESC
+// ------------------------------------------------------------
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (event.key === "Escape") {
+
+            if (
+                modal &&
+                modal.classList.contains("active")
+            ) {
+
+                closeCarousel();
+
+            }
+
+        }
+
+    }
+);
+
+
+
+// ------------------------------------------------------------
+// SETAS DO TECLADO
+// ------------------------------------------------------------
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (
+            !modal ||
+            !modal.classList.contains("active")
+        ) {
+            return;
+        }
+
+
+        if (event.key === "ArrowLeft") {
+
+            previousButton.click();
+
+        }
+
+
+        if (event.key === "ArrowRight") {
+
+            nextButton.click();
+
+        }
+
+    }
+);

@@ -1,0 +1,183 @@
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .main-nav {
+        gap: 14px;
+    }
+
+    .hero-content {
+        grid-template-columns: 1fr;
+        align-items: start;
+
+        gap: 30px;
+    }
+
+    .hero-meta {
+        align-items: flex-start;
+    }
+
+    .about-content {
+        grid-template-columns: 1fr;
+
+        gap: 40px;
+    }
+
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-content {
+        grid-template-columns: 1fr;
+    }
+
+    .experience-item {
+        grid-template-columns: 120px 1fr;
+
+        gap: 24px;
+    }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+    .header-content {
+        min-height: 64px;
+
+        flex-wrap: wrap;
+
+        padding: 12px 0;
+    }
+
+    .main-nav {
+        order: 3;
+
+        width: 100%;
+
+        justify-content: space-between;
+
+        gap: 8px;
+
+        overflow-x: auto;
+    }
+
+    .nav-link {
+        flex: 0 0 auto;
+
+        font-size: 0.78rem;
+    }
+
+    .header-actions {
+        margin-left: auto;
+    }
+
+    .hero {
+        min-height: calc(100vh - 64px);
+
+        padding: 80px 0;
+    }
+
+    .hero-title {
+        font-size: clamp(2.7rem, 14vw, 4.5rem);
+    }
+
+    .hero-subtitle {
+        font-size: 1.15rem;
+    }
+
+    .hero-description {
+        font-size: 0.95rem;
+    }
+
+    .section {
+        padding: 72px 0;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .experience-item {
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+    }
+
+    .project-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 6px;
+    }
+
+    .project-links {
+        flex-direction: column;
+    }
+
+    .btn-small {
+        width: 100%;
+    }
+
+    .footer-content {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .carousel-container {
+        min-height: 280px;
+    }
+
+    .carousel-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .modal-content {
+        padding: 12px;
+    }
+
+    .hero-photo img {
+    width: 220px;
+    height: 280px;
+}
+
+}
+
+
+/* ============================================================
+   MOBILE PEQUENO
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+    .container {
+        width: min(100% - 28px, var(--container-width));
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+    }
+
+    .skill-category,
+    .highlight-card,
+    .contact-item,
+    .project-content {
+        padding: 18px;
+    }
+}
