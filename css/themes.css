@@ -9,8 +9,8 @@
     --text: #eeeeee;
     --text-muted: #999999;
 
-    --accent: #ff6b1a;
-    --accent-hover: #ff7d36;
+    --accent: #1a4fff;
+    --accent-hover: #366cff;
 
     --success: #63c174;
 
@@ -34,6 +34,6 @@
     --text: #111111;
     --text-muted: #666666;
 
-    --accent: #d94f00;
+    --accent: #1a4fff;
 }
 
